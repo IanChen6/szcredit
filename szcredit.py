@@ -22,7 +22,7 @@ import time
 import redis
 from get_db import job_finish
 
-
+logger = create_logger()
 class szcredit(object):
     def __init__(self, cn, sID, batchid, companyid, customerid):
         self.headers = {'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -44,7 +44,7 @@ class szcredit(object):
         self.customerid = customerid
         self.query = [cn, sID]
         self.host, self.port, self.db = get_db(companyid)
-        self.logger = create_logger()
+
 
     def insert_db(self, sql, params):
         conn = pymssql.connect(host=self.host, port=self.port, user='Python', password='pl,okmPL<OKM',
@@ -366,7 +366,7 @@ class szcredit(object):
             print("No exist")
 
         print(data_dict)
-        self.logger.info(data_dict)
+        logger.info(data_dict)
         infojson = json.dumps(data_dict, ensure_ascii=False)
         params = (
             self.batchid, self.companyid, self.customerid, self.cn, self.sID, infojson
@@ -378,7 +378,7 @@ def run_test(cn, sID, batchid, companyid, customerid):
     print("++++++++++++++++++++++++++++++++++++")
     print('jobs[ts_id=%s] running....' % batchid)
     time.sleep(5)
-    logger = create_logger()
+
     try:
         credit = szcredit(cn=cn, sID=sID, batchid=batchid, companyid=companyid,
                           customerid=customerid)
@@ -401,5 +401,5 @@ while True:
         sd = json.loads(ss)
         run_test(sd["1"], sd["2"], sd["3"], sd["4"], sd["5"])
     else:
-        time.sleep(20)
+        time.sleep(10)
         print("no task waited")
