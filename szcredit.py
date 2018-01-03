@@ -349,7 +349,7 @@ class szcredit(object):
 
             for i in range(len(t_list)):
                 data_dict[t_list[i]] = tb_list[i]
-            print(data_dict)
+
 
             if "企业变更信息" in data_dict.keys():
                 d1 = {}
@@ -365,6 +365,7 @@ class szcredit(object):
             print("No exist")
 
         print(data_dict)
+        logger.info(data_dict)
         infojson = json.dumps(data_dict, ensure_ascii=False)
         params = (
             self.batchid, self.companyid, self.customerid, self.cn, self.sID, infojson
@@ -382,8 +383,9 @@ def run_test(cn, sID, batchid, companyid, customerid):
                           customerid=customerid)
         credit.login()
         job_finish(sd["6"], sd["7"], sd["8"], sd["3"], sd["4"], sd["5"], '1', '成功爬取')
+        logger.info("深圳企业信用网信息抓取完成")
     except:
-        logger.info("something wrong during crawling")
+        logger.error("something wrong during crawling")
         job_finish(sd["6"], sd["7"], sd["8"], sd["3"], sd["4"], sd["5"], '-1', 'error')
     print('jobs[ts_id=%s] done' % batchid)
     result = True
