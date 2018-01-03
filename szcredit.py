@@ -44,6 +44,7 @@ class szcredit(object):
         self.customerid = customerid
         self.query = [cn, sID]
         self.host, self.port, self.db = get_db(companyid)
+        self.logger = create_logger()
 
     def insert_db(self, sql, params):
         conn = pymssql.connect(host=self.host, port=self.port, user='Python', password='pl,okmPL<OKM',
@@ -365,7 +366,7 @@ class szcredit(object):
             print("No exist")
 
         print(data_dict)
-        logger.info(data_dict)
+        self.logger.info(data_dict)
         infojson = json.dumps(data_dict, ensure_ascii=False)
         params = (
             self.batchid, self.companyid, self.customerid, self.cn, self.sID, infojson
