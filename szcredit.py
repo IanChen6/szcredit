@@ -13,6 +13,8 @@
 import base64
 import json
 import pymssql
+
+import sys
 from lxml import etree
 import requests
 
@@ -37,6 +39,7 @@ class szcredit(object):
                         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36',
                         'X-Requested-With': 'XMLHttpRequest',
                         }
+
         self.batchid = batchid
         self.cn = cn
         self.sID = sID
@@ -60,6 +63,10 @@ class szcredit(object):
 
     def login(self):
         session = requests.session()
+        try:
+            session.proxies = sys.argv[1]
+        except:
+            self.logger.info("未传代理参数，启用本机IP")
         yzm_url = 'https://www.szcredit.org.cn/web/WebPages/Member/CheckCode.aspx?'
         yzm = session.get(url=yzm_url, headers=self.headers)
 
